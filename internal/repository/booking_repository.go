@@ -82,7 +82,7 @@ func (r *bookingRepository) List(userID uint, page, pageSize int, status constan
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("count bookings: %w", err)
 	}
-	if err := q.Preload("User").Preload("Seat").Offset(page * pageSize).Limit(pageSize).Order("id desc").Find(&list).Error; err != nil {
+	if err := q.Preload("User").Preload("Seat").Offset((page - 1) * pageSize).Limit(pageSize).Order("id desc").Find(&list).Error; err != nil {
 		return nil, 0, fmt.Errorf("list bookings: %w", err)
 	}
 	return list, total, nil

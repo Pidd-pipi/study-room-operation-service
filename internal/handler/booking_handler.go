@@ -36,7 +36,7 @@ func (h *BookingHandler) Create(c *gin.Context) {
 	}
 	booking, err := h.bookingSvc.Create(claims.UserID, req.SeatID, req.BookingDate, req.StartHour, req.EndHour)
 	if err != nil {
-		c.Error(fmt.Errorf("handler create booking: %v", err))
+		c.Error(fmt.Errorf("handler create booking: %w", err))
 		return
 	}
 	util.OKMessage(c, constants.MsgBookingCreateSuccess, booking)
