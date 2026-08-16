@@ -34,7 +34,7 @@ func NewSeatRepository(db *gorm.DB) SeatRepository {
 func (r *seatRepository) Create(seat *model.Seat) error {
 	if err := r.db.Create(seat).Error; err != nil {
 		if isDuplicate(err) {
-			return fmt.Errorf("create seat: %v", ErrDuplicate)
+			return fmt.Errorf("create seat: %w", ErrDuplicate)
 		}
 		return fmt.Errorf("create seat: %w", err)
 	}

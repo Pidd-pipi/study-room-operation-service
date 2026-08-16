@@ -30,7 +30,7 @@ func (h *SeatHandler) Create(c *gin.Context) {
 	}
 	seat, err := h.seatSvc.Create(req.SeatNo, req.Floor, req.Zone, req.SeatType, req.X, req.Y, req.Remark)
 	if err != nil {
-		c.Error(fmt.Errorf("handler create seat: %v", err))
+		c.Error(fmt.Errorf("handler create seat: %w", err))
 		return
 	}
 	util.OK(c, seat)
