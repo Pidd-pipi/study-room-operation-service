@@ -101,7 +101,7 @@ func (r *bookingRepository) UpdateTx(tx *gorm.DB, booking *model.Booking) error 
 
 func (r *bookingRepository) TransitionStatusTx(tx *gorm.DB, id uint, from, to constants.BookingStatus) error {
 	res := dbOrTx(r.db, tx).Model(&model.Booking{}).
-		Where("id = ?", id).
+		Where("id = ? AND status = ?", id, from).
 		Update("status", to)
 	if res.Error != nil {
 		return fmt.Errorf("transition booking status: %w", res.Error)

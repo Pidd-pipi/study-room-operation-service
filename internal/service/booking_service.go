@@ -177,7 +177,7 @@ func (s *bookingService) Cancel(userID, bookingID uint) (*model.Booking, error) 
 	if booking.UserID != userID {
 		return nil, fmt.Errorf("cancel booking[id=%d] not owner: %w", bookingID, util.ErrForbidden)
 	}
-	if booking.Status == constants.BookingCompleted {
+	if !constants.CanBookingTransition(booking.Status, constants.BookingCancelled) {
 		return nil, fmt.Errorf("cancel booking[id=%d] status[%s]: %w", bookingID, booking.Status, util.ErrConflict)
 	}
 	err = s.db.Transaction(func(tx *gorm.DB) error {
