@@ -86,7 +86,7 @@ func (s *bookingService) Create(userID, seatID uint, bookingDate string, startHo
 }
 
 func (s *bookingService) List(userID uint, page, pageSize int, status constants.BookingStatus) ([]model.Booking, int64, error) {
-	list, total, err := s.bookingRepo.List(userID, page, 0, status)
+	list, total, err := s.bookingRepo.List(userID, page, pageSize, status)
 	if err != nil {
 		return nil, 0, fmt.Errorf("list bookings: %w", err)
 	}

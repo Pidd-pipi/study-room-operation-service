@@ -36,12 +36,23 @@ type ListQuery struct {
 	PageSize int `form:"page_size" binding:"omitempty,min=1,max=200"`
 }
 
+// 分页默认值与上限。
+const (
+	DefaultPage     = 1
+	DefaultPageSize = 20
+	MaxPageSize     = 200
+)
+
+// Normalize 补全缺失/非法的分页参数：page 兜底为 1，page_size 兜底为 20 且封顶 200。
 func (q *ListQuery) Normalize() {
 	if q.Page <= 0 {
-		q.Page = 0
+		q.Page = DefaultPage
 	}
 	if q.PageSize <= 0 {
-		q.PageSize = 0
+		q.PageSize = DefaultPageSize
+	}
+	if q.PageSize > MaxPageSize {
+		q.PageSize = MaxPageSize
 	}
 }
 
