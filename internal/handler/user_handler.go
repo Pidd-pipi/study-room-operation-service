@@ -31,7 +31,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 	}
 	user, err := h.userSvc.Register(req.Username, req.Password, req.Nickname, req.Phone, req.Role)
 	if err != nil {
-		c.Error(fmt.Errorf("handler register: %w", err))
+		c.Error(fmt.Errorf("handler register: %v", err))
 		return
 	}
 	util.OKMessage(c, constants.MsgRegisterSuccess, user)

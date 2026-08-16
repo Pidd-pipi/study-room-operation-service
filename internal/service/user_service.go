@@ -51,7 +51,7 @@ func (s *userService) Register(username, password, nickname, phone string, role 
 	user := &model.User{Username: username, PasswordHash: string(hash), Nickname: nickname, Phone: phone, Role: role}
 	if err := s.userRepo.Create(user); err != nil {
 		if errors.Is(err, repository.ErrDuplicate) {
-			return nil, fmt.Errorf("register user[username=%s]: %w", username, util.ErrConflict)
+			return nil, fmt.Errorf("register user[username=%s]: %w", username, util.ErrValidation)
 		}
 		return nil, fmt.Errorf("register user[username=%s]: %w", username, err)
 	}
