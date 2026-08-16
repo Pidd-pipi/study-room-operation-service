@@ -32,7 +32,7 @@ func NewSeatService(seatRepo repository.SeatRepository, logger *slog.Logger) Sea
 }
 
 func (s *seatService) Create(seatNo string, floor int, zone constants.SeatZone, seatType string, x, y int, remark string) (*model.Seat, error) {
-	if seatNo == "" || !zone.Valid() {
+	if seatNo == "" {
 		return nil, fmt.Errorf("create seat: %w", util.ErrValidation)
 	}
 	if floor <= 0 {
