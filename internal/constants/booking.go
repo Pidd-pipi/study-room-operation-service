@@ -21,7 +21,7 @@ func (s BookingStatus) Valid() bool {
 
 // BookingStatusFlow 预约状态机：新增状态值需同步前端 constants、按钮显隐、日志模板、错误码、formatters。
 var BookingStatusFlow = map[BookingStatus][]BookingStatus{
-	BookingPending:   {BookingCheckedIn},
+	BookingPending:   {BookingCheckedIn, BookingCancelled, BookingNoShow},
 	BookingCheckedIn: {BookingCompleted},
 	BookingCompleted: {},
 	BookingCancelled: {},
