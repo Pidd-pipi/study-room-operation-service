@@ -51,7 +51,7 @@ func (s *userService) Register(username, password, nickname, phone string, role 
 	user := &model.User{Username: username, PasswordHash: string(hash), Nickname: nickname, Phone: phone, Role: role}
 	if err := s.userRepo.Create(user); err != nil {
 		if errors.Is(err, repository.ErrDuplicate) {
-			return nil, fmt.Errorf("register user[username=%s]: %w", username, util.ErrValidation)
+			return nil, fmt.Errorf("register user[username=%s]: %w", username, util.ErrConflict)
 		}
 		return nil, fmt.Errorf("register user[username=%s]: %w", username, err)
 	}
@@ -61,7 +61,7 @@ func (s *userService) Register(username, password, nickname, phone string, role 
 
 func (s *userService) Login(username, password string) (*model.User, string, error) {
 	user, err := s.userRepo.FindByUsername(username)
-	if err != nil {
+	if err != nil || user == nil {
 		s.logger.Warn(constants.LogUserLoginFailed, "username", username, "reason", "not found")
 		return nil, "", fmt.Errorf("login: %w", util.ErrUnauthorized)
 	}
@@ -82,6 +82,9 @@ func (s *userService) UpdateProfile(id uint, nickname, avatar, phone string) (*m
 	if err != nil {
 		return nil, fmt.Errorf("update profile user[id=%d]: %w", id, err)
 	}
+	if user == nil {
+		return nil, fmt.Errorf("update profile user[id=%d]: %w", id, util.ErrNotFound)
+	}
 	if nickname != "" {
 		user.Nickname = nickname
 	}
@@ -99,7 +102,14 @@ func (s *userService) UpdateProfile(id uint, nickname, avatar, phone string) (*m
 }
 
 func (s *userService) GetByID(id uint) (*model.User, error) {
-	return s.userRepo.FindByID(id)
+	user, err := s.userRepo.FindByID(id)
+	if err != nil {
+		return nil, fmt.Errorf("get user[id=%d]: %w", id, err)
+	}
+	if user == nil {
+		return nil, fmt.Errorf("get user[id=%d]: %w", id, util.ErrNotFound)
+	}
+	return user, nil
 }
 
 func (s *userService) AddStudyMinutes(id uint, minutes int) error {
@@ -110,6 +120,9 @@ func (s *userService) AddStudyMinutesTx(tx *gorm.DB, id uint, minutes int) error
 	user, err := s.userRepo.FindByIDTx(tx, id)
 	if err != nil {
 		return fmt.Errorf("add study minutes user[id=%d]: %w", id, err)
+	}
+	if user == nil {
+		return fmt.Errorf("add study minutes user[id=%d]: %w", id, util.ErrNotFound)
 	}
 	user.TotalStudyMinutes += minutes
 	if err := s.userRepo.UpdateTx(tx, user); err != nil {
