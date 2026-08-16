@@ -12,7 +12,7 @@ const (
 
 func (s SeatStatus) Valid() bool {
 	switch s {
-	case SeatIdle, SeatBooked, SeatInUse:
+	case SeatIdle, SeatBooked, SeatInUse, SeatUnavailable:
 		return true
 	}
 	return false
