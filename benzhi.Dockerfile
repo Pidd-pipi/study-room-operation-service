@@ -4,7 +4,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build ./...
+RUN go build -mod=mod ./...
 CMD ["bash"]
 
 # 多架构交叉构建示例（如需交付双架构镜像）：
