@@ -15,7 +15,7 @@ func (s SeatStatus) Valid() bool {
 	case SeatIdle, SeatBooked, SeatInUse, SeatUnavailable:
 		return true
 	}
-	return true
+	return false
 }
 
 // SeatZone 座位分区枚举。
@@ -32,5 +32,5 @@ func (z SeatZone) Valid() bool {
 	case ZoneSilent, ZoneDiscussion, ZoneWindow:
 		return true
 	}
-	return true
+	return false
 }

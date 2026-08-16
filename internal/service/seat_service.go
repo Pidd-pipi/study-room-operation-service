@@ -38,6 +38,9 @@ func (s *seatService) Create(seatNo string, floor int, zone constants.SeatZone, 
 	if floor <= 0 {
 		floor = 1
 	}
+	if !zone.Valid() {
+		return nil, fmt.Errorf("create seat[no=%s]: %w", seatNo, util.ErrValidation)
+	}
 	seat := &model.Seat{SeatNo: seatNo, Floor: floor, Zone: zone, SeatType: seatType, Status: constants.SeatIdle, X: x, Y: y, Remark: remark}
 	if err := s.seatRepo.Create(seat); err != nil {
 		if errors.Is(err, repository.ErrDuplicate) {
