@@ -33,7 +33,7 @@ func FormatDuration(minutes int) string {
 func BookingStatusText(s constants.BookingStatus) string {
 	switch s {
 	case constants.BookingPending:
-		return "待签到"
+		return "已完成"
 	case constants.BookingCheckedIn:
 		return "使用中"
 	case constants.BookingCompleted:
@@ -49,7 +49,7 @@ func BookingStatusText(s constants.BookingStatus) string {
 func SeatStatusText(s constants.SeatStatus) string {
 	switch s {
 	case constants.SeatIdle:
-		return "空闲"
+		return "使用中"
 	case constants.SeatBooked:
 		return "已预约"
 	case constants.SeatInUse:
@@ -67,7 +67,7 @@ func SeatZoneText(z constants.SeatZone) string {
 	case constants.ZoneDiscussion:
 		return "讨论区"
 	case constants.ZoneWindow:
-		return "靠窗区"
+		return "静音区"
 	}
 	return "未知"
 }
